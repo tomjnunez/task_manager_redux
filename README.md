@@ -1,4 +1,4 @@
-# Revenge of Task Manager
+# Task Manager Redux
 
 Let's use Sinatra to build an application where we can manage our tasks.
 
@@ -32,7 +32,7 @@ run TaskManagerApp
 
 The first two lines of this file allow all of your gems to be required. Then, we change the load path so that everything inside of our `app` folder (we haven't created it yet) can be required. Next, we require a file called `task_manager_app` that will be inside of our `controllers` folder. Finally, we call the run method and specify that our app is called TaskManagerApp.
 
-Go ahead and run `bundle install` from the command line.
+Run `bundle install` from the command line.
 
 ## Project Folder Structure
 
@@ -43,7 +43,7 @@ $ mkdir app
 $ mkdir db
 ```
 
-We'll use the `app` folder for all of our implementation code. Our `db` folder will hold our fake database (we're going to use a [YAML](http://www.yaml.org/) file, not a real database).
+We'll use the `app` folder for all of our implementation code. Our `db` folder will hold our database.
 
 We'll need a few folders inside of our app folder so that we can separate our files.
 
@@ -53,7 +53,7 @@ $ mkdir app/models
 $ mkdir app/views
 ```
 
-Although we could put all of our code inside of the same folder (or even most of it in the same file), we're going to use this structure to mimic the [MVC](http://www.codelearn.org/ruby-on-rails-tutorial/mvc-in-rails) setup that Rails will give us.
+Although we could put all of our code inside of the same folder (or even most of it in the same file), we're going to use this structure to mimic the [MVC](https://www.youtube.com/watch?v=eTdVkgF_Slo) setup that Rails will give us.
 
 ## Getting the App Running
 
@@ -120,7 +120,7 @@ Inside of this file, let's add links to some functionality we might want in our 
 </ul>
 ```
 
-We have an h1 tag for our welcome message, then an unordered list (ul) with two list items (li) inside. If you are unfamiliar with HTML tags, try one of the [HTML tutorials](https://github.com/turingschool/intermission-assignments/blob/master/prep-for-module-2.markdown) before continuing.
+We have an h1 tag for our welcome message, then an unordered list (ul) with two list items (li) inside. If you are unfamiliar with HTML tags, try one of the [HTML tutorials](https://github.com/turingschool/intermission-assignments/blob/master/prep-for-module-2-backend.markdown) before continuing.
 
 Inside of each li tag, we have an `a` tag. The href of the tag is the path where the link will go. In the first a tag, the path will be `http://localhost:9393/tasks`. The second path will be `http://localhost:9393/tasks/new`.
 
@@ -290,9 +290,9 @@ end
 
 You'll sometimes see this I'm-going-to-assume-I-have-a-thing-that-works approach referred to as "top-down" programming. For an awesome video demonstration take a look at [this](https://vimeo.com/131588133) when you have a moment. The opposite approach would be "bottom-up" where we start with the smallest piece that we can get to work and start building on it. Both are totally valid.
 
-In order to follow MVC conventions, we're going to create this file in our `app/models` directory. Go ahead and `touch app/models/task.rb`
+In order to follow MVC conventions, we're going to create this file in our `app/models` directory. Let's create our new model using `touch app/models/task.rb`
 
-In that file, let's go ahead and create a `#new` method that returns a new Task object.
+In that file, create a `#new` method that returns a new Task object.
 
 ```ruby
 class Task
@@ -303,7 +303,7 @@ class Task
 end
 ```
 
-Before we forget, let's go ahead and `require` this new Task class in `/app/controllers/task_manager_app.rb` where we plan on using it.
+Before we forget, let's `require` this new Task class in `/app/controllers/task_manager_app.rb` where we plan on using it.
 
 ```ruby
 require_relative '../models/task.rb'
@@ -315,7 +315,7 @@ There are a lot of ways we could do this. We could potentially store each task i
 
 ### An SQL Detour
 
-At this point, let's go ahead and do some of the basic things that we need to do to get SQL set up in our project. We'll need to take the following steps:
+At this point, let's do some of the basic things that we need to do to get SQL set up in our project. We'll need to take the following steps:
 
 * Add an SQL gem to our Gemfile
 * Create an SQL database and a Task table in that database
@@ -349,7 +349,7 @@ $ touch db/migrations/001_create_tasks.rb
 
 The 001 in the file name above helps us keep our migrations in order. If we create a table in one migration and then later in our project decide that we need to add a column to that table, the file names will keep us from trying to add a column to a table that doesn't yet exist.
 
-Go ahead and add the code below to your newly created migration.
+Add the code below to your newly created migration.
 
 ```
 # db/migrations/001_create_tasks.rb
@@ -365,7 +365,7 @@ database.execute("CREATE TABLE tasks (id INTEGER PRIMARY KEY AUTOINCREMENT,
 puts "creating tasks table for development"
 ```
 
-Let's go ahead and run the code in this file with:
+Run the code in this file with:
 
 ```
 $ ruby db/migrations/001_create_tasks.rb
@@ -391,13 +391,15 @@ sqlite> .schema
 
 You should see a description of the table that you just created in your database. Ideally there is some reference to an id, title, and description included in the response you see. That should give you some comfort that your table has been created with the proper headers.
 
-We can also use some SQL to see what's in the database. Go ahead and use the following code to select all rows from your tasks table.
+We can also use some SQL to see what's in the database. Use the following code to select all rows from your tasks table.
 
 ```
 sqlite> SELECT * FROM tasks;
 ```
 
 That was a little bit anticlimactic. I expect that you didn't see any output. Take solace in the fact that if you didn't have a table in your database you would've seen an error.
+
+Also, know that this is a great tool for us to have at our fingertips. If ever you feel like you're a little unsure of what you have in your database, know that you can poke around using the commands above.
 
 To exit use `Ctrl-\`
 
@@ -419,7 +421,7 @@ At the top of our `app/models/task.rb` file, let's require our new SQLite3 gem:
 require 'sqlite3'
 ```
 
-And now, in the same file let's go ahead and add  add the following code to our `initialize` method:
+And now, in the same file add the following code to our `initialize` method:
 
 ```
 @database = SQLite3::Database.new('db/task_manager_development.db')
@@ -440,13 +442,13 @@ def save
 end
 ```
 
-Just to walk through that a little bit, we're using #execute on our SQLite3::Database object and passing raw SQL. The #execute method will replace the question marks it finds in the SQL with the additional parameters that we pass before running the SQL command.
+Just to walk through that a little bit, we're using #execute on our SQLite3::Database object and passing raw SQL. The #execute method will replace the question marks it finds in the SQL with the additional parameters (i.e. in this case `@title`, and `@description`) that we pass before running the SQL command.
 
 ### Reading from Our Database
 
 Cool. With that in place, let's go check on our website. If you happened to have left your server running in a terminal window, be sure to quit that (using `Control-c`), and then restart it (`shotgun`). Shotgun is pretty good about picking up changes to our code, but adding that gem to our Gemfile will require a restart. In the future if you're not seeing the changes you expect, this might be one thing to check.
 
-Once you've restarted, go ahead and visit `/`, click on `New Task`, enter some information into your form, click on `Submit`, and... nothing? We're still displaying those same old tasks. Some quick investigation and we'll remember that we still have the following code in our `app/controllers/task_manager_app.rb` file:
+Once you've restarted, visit `/`, click on `New Task`, enter some information into your form, click on `Submit`, and... nothing? We're still displaying those same old tasks. Some quick investigation and we'll remember that we still have the following code in our `app/controllers/task_manager_app.rb` file:
 
 ```ruby
 get '/tasks' do
@@ -466,9 +468,9 @@ $ sqlite3 db/task_manager_development.db
 sqlite > SELECT * FROM tasks;
 ```
 
-I'm hoping that this returns an actual task that you created. Go ahead and add a few more tasks from your browser (your server is still running in a different terminal window, right?), and then check again to see if those tasks have been added successfully.
+I'm hoping that this returns an actual task that you created. Add a few more tasks from your browser (your server is still running in a different terminal window, right?), and then check again to see if those tasks have been added successfully.
 
-Assuming everything checks out, let's go ahead and get back to that `get 'tasks'` method.
+Assuming everything checks out, let's get back to that `get 'tasks'` method.
 
 #### Updating Our Task Manager Controller
 
@@ -510,7 +512,7 @@ Why are we creating a new database object in the code above? Remember that we ha
 
 #### Checking Our Results
 
-So... if that all works, we should be able to go to `/tasks` to see all of our tasks, right? Let's check it out. Go ahead and visit `/tasks` and see what you find.
+So... if that all works, we should be able to go to `/tasks` to see all of our tasks, right? Let's check it out. Visit `/tasks` and see what you find.
 
 Not quite what you expected? It looks to me like we switched from some simple strings that were displaying pretty well to... a mess?
 
@@ -526,7 +528,7 @@ Currently I have this code:
 <% end %>
 ```
 
-So, in those `<h3>` tags we're just rendering a task, which if we look at our `self.all` method in our `app/models/task.rb` file makes sense. It's a little bit surprising that these are actually showing up on the page as pound symbols, but interesting to note. Let's go ahead and update our view in `/app/views/index.erb` to the following:
+So, in those `<h3>` tags we're just rendering a task, which if we look at our `self.all` method in our `app/models/task.rb` file makes sense. It's a little bit surprising that these are actually showing up on the page as pound symbols, but interesting to note. Let's update our view in `/app/views/index.erb` to the following:
 
 ```erb
 <% @tasks.each do |task| %>
@@ -535,7 +537,7 @@ So, in those `<h3>` tags we're just rendering a task, which if we look at our `s
 <% end %>
 ```
 
-Let's visit our page to see if that's done what we expect it to. Go ahead and reload `/tasks` and see if you find your tasks now instead of those pesky pound signs.
+Let's visit our page to see if that's done what we expect it to. Reload `/tasks` and see if you find your tasks now instead of those pesky pound signs.
 
 No? Do you get a no method error? Bummer. If we're still on the same page it looks like we do still have a `Task` object, but `title` is not a method for that object.
 
@@ -596,7 +598,7 @@ THAT WAS OUR NEXT STEP!
 
 #### Add a view for an individual task
 
-Let's create the view. Go ahead and make the file:
+Let's create the view. Create the file:
 
 ```
 $ touch app/views/show.erb
