@@ -16,8 +16,6 @@ class Task
   end
 
   def self.all
-    database = SQLite3::Database.new('db/task_manager_development.db')
-    database.results_as_hash = true
     tasks = database.execute("SELECT * FROM tasks")
     tasks.map do |task|
       Task.new(task)
@@ -25,15 +23,11 @@ class Task
   end
 
   def self.find(id)
-    database = SQLite3::Database.new('db/task_manager_development.db')
-    database.results_as_hash = true
     task = database.execute("SELECT * FROM tasks WHERE id = ?", id).first
     Task.new(task)
   end
 
   def self.update(id, task_params)
-    database = SQLite3::Database.new('db/task_manager_development.db')
-    database.results_as_hash = true
     database.execute("UPDATE tasks
                       SET title = ?,
                           description = ?
@@ -46,9 +40,13 @@ class Task
   end
 
   def self.destroy(id)
-    database = SQLite3::Database.new('db/task_manager_development.db')
-    database.results_as_hash = true
     database.execute("DELETE FROM tasks
                       WHERE id = ?;", id)
+  end
+
+  def self.database
+    database = SQLite3::Database.new('db/task_manager_development.db')
+    database.results_as_hash = true
+    database
   end
 end

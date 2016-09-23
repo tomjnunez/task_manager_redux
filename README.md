@@ -1,4 +1,4 @@
-# Task Manager Redux
+# Task Manager
 
 Let's use Sinatra to build an application where we can manage our tasks.
 
@@ -32,7 +32,7 @@ run TaskManagerApp
 
 The first two lines of this file allow all of your gems to be required. Then, we change the load path so that everything inside of our `app` folder (we haven't created it yet) can be required. Next, we require a file called `task_manager_app` that will be inside of our `controllers` folder. Finally, we call the run method and specify that our app is called TaskManagerApp.
 
-Run `bundle install` from the command line.
+Run `bundle install` from the command line. This will install the contents of your `Gemfile` so that you (and others in the future) can use them throughout your project.
 
 ## Project Folder Structure
 
@@ -292,7 +292,7 @@ You'll sometimes see this I'm-going-to-assume-I-have-a-thing-that-works approach
 
 In order to follow MVC conventions, we're going to create this file in our `app/models` directory. Let's create our new model using `touch app/models/task.rb`
 
-In that file, create a `#new` method that returns a new Task object.
+In that file, create an `#initialize` method that will be called when a new Task instance is created.
 
 ```ruby
 class Task
