@@ -656,4 +656,25 @@ attr_reader :title, :description, :id
 
 Reload `/tasks` and at this point you should be able to see the tasks, click on a link to see an individual task, and then click on a link to take you back to the Task Index.
 
+### Refactoring
+
+In our `task` model, we currently have two class methods (`.all`, and `.find`) that begin with identical lines of code.
+
+```ruby
+    database = SQLite3::Database.new('db/task_manager_development.db')
+    database.results_as_hash = true
+```
+
+Wouldn't it be great if we could DRY up this code? Let's put those two lines into their own method. Remove those lines, and add the following method to `/app/models/task.rb`. We'll name the method `database`, the same as the variables that we're currently using, so that we don't have to change the remaining code in the existing methods.
+
+```ruby
+  def database
+    database = SQLite3::Database.new('db/task_manager_development.db')
+    database.results_as_hash = true
+    database
+  end
+```
+
+Why did we have to add the last line? Remember, Ruby methods return the last line that's evaluated. The second line in this method actually returns `true`. If you'd like to see for yourself, run `t = true` or something similar in `pry` or `irb`. Alternatively, go ahead and leave that last `database` out and read through the errors you see when using the applciation. That last line returns the database itself, which is what we'll want to be using in all the other methods where we call it.
+
 Take a moment to appreciate how cool it is that you made this all from scratch. As you move forward, you'll likely be using frameworks that give you some of this functionality for free, but it's not magic, just some thoughtful coding and elbow grease.
