@@ -7,7 +7,11 @@ class Task
     @description = task_params["description"]
     @title       = task_params["title"]
     @id          = task_params["id"] if task_params["id"]
-    @database    = SQLite3::Database.new('db/task_manager_development.db')
+    if ENV['RACK_ENV'] == 'test'
+      @database = SQLite3::Database.new('db/task_manager_test.db')
+    else
+      @database = SQLite3::Database.new('db/task_manager_development.db')
+    end
     @database.results_as_hash = true
   end
 
@@ -44,8 +48,16 @@ class Task
                       WHERE id = ?;", id)
   end
 
+  def self.destroy_all
+    database.execute("DELETE FROM tasks;")
+  end
+
   def self.database
-    database = SQLite3::Database.new('db/task_manager_development.db')
+    if ENV['RACK_ENV'] == 'test'
+      database = SQLite3::Database.new('db/task_manager_test.db')
+    else
+      database = SQLite3::Database.new('db/task_manager_development.db')
+    end
     database.results_as_hash = true
     database
   end
