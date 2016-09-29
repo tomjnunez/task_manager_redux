@@ -668,7 +668,7 @@ In our `task` model, we currently have two class methods (`.all`, and `.find`) t
 Wouldn't it be great if we could DRY up this code? Let's put those two lines into their own method. Remove those lines, and add the following method to `/app/models/task.rb`. We'll name the method `database`, the same as the variables that we're currently using, so that we don't have to change the remaining code in the existing methods.
 
 ```ruby
-  def database
+  def self.database
     database = SQLite3::Database.new('db/task_manager_development.db')
     database.results_as_hash = true
     database
