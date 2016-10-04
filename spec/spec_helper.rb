@@ -7,13 +7,7 @@ ENV['RACK_ENV'] = 'test'
 
 Capybara.app = TaskManagerApp
 
-module RSpecMixin
-  include Rack::Test::Methods
-  def app() described_class end
-end
-
 RSpec.configure do |c|
-  c.include RSpecMixin
   c.before(:all) do
     Task.destroy_all
   end
