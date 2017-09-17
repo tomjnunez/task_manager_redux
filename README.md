@@ -1,6 +1,21 @@
 # Task Manager
 
+## CRUD in Sinatra
+
+What does CRUD (in the the programming world) stand for?
+
+* C: Create
+* R: Read
+* U: Update
+* D: Delete
+
+The apps that you will be creating in Mod 2 will make heavy use of these four actions. 
+
 Let's use Sinatra to build an application where we can manage our tasks.
+
+We're going to follow the [MVC](https://www.sitepoint.com/getting-started-with-mvc/) design pattern (Rails uses this by default, but in Sinatra we will need to create this structure ourselves) to implement the CRUD actions.
+
+Throughout the module, we'll talk through some conventions and best practices, but for now - we'd like for you to follow along with this tutorial. We highly recommend **not** copying and pasting the code in this tutorial. It's to your advantage to type each line of code on your own. 
 
 ## Getting Configured
 
@@ -676,5 +691,117 @@ Wouldn't it be great if we could DRY up this code? Let's put those two lines int
 ```
 
 Why did we have to add the last line? Remember, Ruby methods return the last line that's evaluated. The second line in this method actually returns `true`. If you'd like to see for yourself, run `t = true` or something similar in `pry` or `irb`. Alternatively, go ahead and leave that last `database` out and read through the errors you see when using the applciation. That last line returns the database itself, which is what we'll want to be using in all the other methods where we call it.
+
+#### Editing a task
+
+Our **edit** route should bring the user to a form where they can change the title and description of the task. In order to create this functionality, we'll need to create a button to get to the edit page, a route in our controller for that link, and a view that will be rendered when we hit the new route.
+
+In our `index.erb` view:
+
+```erb
+<h1>All Tasks</h1>
+
+<% @tasks.each do |task| %>
+  <h3><a href="/tasks/<%= task.id %>"><%= task.title %></a></h3>
+  <p><%= task.description  %></p>
+  <a href="/tasks/<%= task.id %>/edit">Edit</a>
+<% end %>
+```
+
+In our controller:
+
+```ruby
+  get '/tasks/:id/edit' do
+    @task = Task.find(params[:id])
+    erb :edit
+  end
+```
+In our view, `edit.erb`:
+
+```erb
+<form action="/tasks/<%= @task.id %>" method="post">
+  <p>Edit</p>
+  <input type="hidden" name="_method" value="PUT" />
+  <input type='text' name='task[title]' value="<%= @task.title %>"/><br/>
+  <textarea name='task[description]'><%= @task.description %></textarea><br/>
+  <input type='submit'/>
+</form>
+```
+
+One quick note about the form: you'll notice that there's a hidden field with a value of `PUT`. Normally, HTML forms only allow `GET` or `POST` requests (see more information [here](http://www.w3schools.com/tags/att_form_method.asp)). 
+
+We're going to want this form to access a route in our controller (that we'll create momentarily) using `PUT` to be consistent with conventions about the HTTP verb that is used when updating a resource (take a quick look at [this table](http://www.restapitutorial.com/lessons/httpmethods.html) if this is new information). 
+
+HTML won't allow us to use `method='put'` in our `form` tag, but passing it as a hidden value gives our controller the information it needs to route the request correctly.
+
+#### Updating a task
+
+Our new form needs somewhere to go when a user clicks submit. We'll use the **update** route to do the work of changing the task in the database.
+
+In our controller:
+
+```ruby
+  set :method_override, true  # this allows us to use _method in the form
+  ...
+  put '/tasks/:id' do |id|
+    Task.update(id.to_i, params[:task])
+    redirect "/tasks/#{id}"
+  end
+```
+
+In our Task model:
+
+```ruby
+  def self.update(id, task_params)
+    database.execute("UPDATE tasks
+                      SET title = ?,
+                          description = ?
+                      WHERE id = ?;",
+                      task_params[:title],
+                      task_params[:description],
+                      id)
+
+    Task.find(id)
+  end
+```
+
+#### Deleting a task
+
+We don't need a form to delete a task, we just need to know which task we want to delete. We'll use a form to send a `DELETE` request to a route with our task id.
+
+In our `index.erb` view:
+
+```erb
+<% @tasks.each do |task| %>
+  <h3><a href="/tasks/<%= task.id %>"><%= task.title %></a></h3>
+  <p><%= task.description %></p>
+  <a href="/tasks/<%= task.id  %>/edit">Edit</a>
+  <form action="/tasks/<%= task.id %>" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="submit" value="delete"/>
+  </form>
+<% end %>
+```
+
+In our controller:
+
+```ruby
+  delete '/tasks/:id' do |id|
+    Task.destroy(id.to_i)
+    redirect '/tasks'
+  end
+```
+
+In our Task model:
+
+```ruby
+  def self.destroy(id)
+    database.execute("DELETE FROM tasks
+                      WHERE id = ?;", id)
+  end
+```
+
+### Finished?
+Answer the questions [here](https://gist.github.com/case-eee/1f066fa3be100f8f18f4d31f521a3da4) to recap what you've learned.
 
 Take a moment to appreciate how cool it is that you made this all from scratch. As you move forward, you'll likely be using frameworks that give you some of this functionality for free, but it's not magic, just some thoughtful coding and elbow grease.
