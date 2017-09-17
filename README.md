@@ -692,7 +692,7 @@ Wouldn't it be great if we could DRY up this code? Let's put those two lines int
 
 Why did we have to add the last line? Remember, Ruby methods return the last line that's evaluated. The second line in this method actually returns `true`. If you'd like to see for yourself, run `t = true` or something similar in `pry` or `irb`. Alternatively, go ahead and leave that last `database` out and read through the errors you see when using the applciation. That last line returns the database itself, which is what we'll want to be using in all the other methods where we call it.
 
-#### Editing a task
+### Editing a task
 
 Our **edit** route should bring the user to a form where they can change the title and description of the task. In order to create this functionality, we'll need to create a button to get to the edit page, a route in our controller for that link, and a view that will be rendered when we hit the new route.
 
@@ -734,7 +734,7 @@ We're going to want this form to access a route in our controller (that we'll cr
 
 HTML won't allow us to use `method='put'` in our `form` tag, but passing it as a hidden value gives our controller the information it needs to route the request correctly.
 
-#### Updating a task
+### Updating a task
 
 Our new form needs somewhere to go when a user clicks submit. We'll use the **update** route to do the work of changing the task in the database.
 
@@ -765,7 +765,7 @@ In our Task model:
   end
 ```
 
-#### Deleting a task
+### Deleting a task
 
 We don't need a form to delete a task, we just need to know which task we want to delete. We'll use a form to send a `DELETE` request to a route with our task id.
 
@@ -801,7 +801,7 @@ In our Task model:
   end
 ```
 
-### Finished?
+## Finished?
 Answer the questions [here](https://gist.github.com/case-eee/1f066fa3be100f8f18f4d31f521a3da4) to recap what you've learned.
 
 Take a moment to appreciate how cool it is that you made this all from scratch. As you move forward, you'll likely be using frameworks that give you some of this functionality for free, but it's not magic, just some thoughtful coding and elbow grease.
