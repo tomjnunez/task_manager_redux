@@ -135,7 +135,7 @@ Inside of this file, let's add links to some functionality we might want in our 
 </ul>
 ```
 
-We have an h1 tag for our welcome message, then an unordered list (ul) with two list items (li) inside. If you are unfamiliar with HTML tags, try one of the [HTML tutorials](https://github.com/turingschool/intermission-assignments/blob/master/prep-for-module-2-backend.markdown) before continuing.
+We have an h1 tag for our welcome message, then an unordered list (ul) with two list items (li) inside. If you are unfamiliar with HTML tags, try one of the [HTML tutorials](https://github.com/turingschool/intermission-assignments/blob/master/2be/details/html-css.md) before continuing.
 
 Inside of each li tag, we have an `a` tag. The href of the tag is the path where the link will go. In the first a tag, the path will be `http://localhost:9393/tasks`. The second path will be `http://localhost:9393/tasks/new`.
 
