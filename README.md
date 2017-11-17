@@ -291,7 +291,7 @@ I'm sure we could figure out a way to do everything we needed to do in this file
 
 ### Creating Our Task Class
 
-Let's change the code inside of our controller to use this Task class that we're thinking about creating. If it was up to me (and it is), I would create a new task with my task params and then save it so that I could find it later. Let's assume that we're going to create a class that does just that. Find the `post'/tasks'` route inside of the `app/controllers/task_manager_app.rb` file and replace our existing code with the following:
+Let's change the code inside of our controller to use this Task class that we're thinking about creating. If it were up to me (and it is), I would create a new task with my task params and then save it so that I could find it later. Let's assume that we're going to create a class that does just that. Find the `post'/tasks'` route inside of the `app/controllers/task_manager_app.rb` file and replace our existing code with the following:
 
 ```ruby
 # /app/controllers/task_manager_app.rb
