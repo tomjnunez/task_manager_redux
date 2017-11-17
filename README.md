@@ -273,9 +273,9 @@ Params: {"task"=>{"title"=>"Make cookies", "description"=>"Chocolate chip cookie
 Task params: {"title"=>"Make cookies", "description"=>"Chocolate chip cookies are so delicious. I am hungry."}
 ```
 
-Notice that `params` is just a hash. The key is `"task"` and the value is another hash containing the `title` and `description`. This structure was created because of the way we named the input fields in our form (go back and look at the form if this is confusing to you).
+Notice that `params` is a hash. The key is `"task"` and the value is another hash containing the `title` and `description`. This structure was created because of the way we named the input fields in our form (go back and look at the form to see how these are connected).
 
-When we access `params[:task]`, we get back just the part we want; the title and description. This is what we'll use to build a task.
+When we access `params[:task]`, we get back only the part we want; the title and description. This is what we'll use to build a task.
 
 ## Saving Tasks
 
