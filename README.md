@@ -447,7 +447,7 @@ For more information on the #results_as_hash method take a look at the documenta
 
 ### Writing to Our Database
 
-Let's see if we can use this database to implement our the save method that we have still hanging out in our controller.
+Let's see if we can use this database to implement the save method that we have still hanging out in our controller.
 
 In the Task class (`app/models/task.rb`), let's add the following method:
 
