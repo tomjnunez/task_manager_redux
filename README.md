@@ -324,7 +324,7 @@ Before we forget, let's `require` this new Task class in `/app/controllers/task_
 require_relative '../models/task.rb'
 ```
 
-Cool. We have a Task class that we can use to create new tasks. That first line of our `post '/tasks'` method in our controller should work at this point. But what about the next one? Right now we don't have a `save` method in our Task clsas. Let's see if we can get that created so we can move on.
+Cool. We have a Task class that we can use to create new tasks. That first line of our `post '/tasks'` method in our controller should work at this point. But what about the next one? Right now we don't have a `save` method in our Task class. Let's see if we can get that created so we can move on.
 
 There are a lot of ways we could do this. We could potentially store each task in a CSV file and retrieve it using the CSV methods that Ruby gives us. I'm betting you could write an implementation that does that with the skills you have now. However, as our apps become more complex we're going to need more sophisticated ways to store and retrieve data. To that end, we're going to use this app as an opportunity to introduce you to some basic SQL.
 
