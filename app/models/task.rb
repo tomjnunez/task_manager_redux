@@ -3,11 +3,11 @@ class Task
   attr_reader :title, :description, :id
 
   def initialize(task_params)
+    @id = task_params["id"] if task_params["id"]
     @description = task_params["description"]
     @title       = task_params["title"]
     @database = SQLite3::Database.new('db/task_manager_development.db')
     @database.results_as_hash = true
-    @id = task_params["id"] if task_params["id"]
   end
 
   def save
@@ -33,6 +33,7 @@ class Task
     end
   end
 
+
   def self.update(id, task_params)
     database.execute("UPDATE tasks
                     SET title = ?,
@@ -43,5 +44,10 @@ class Task
                     id)
 
     Task.find(id)
+  end
+
+  def self.destroy(id)
+  database.execute("DELETE FROM tasks
+                    Where id = ?;",id)
   end
 end
